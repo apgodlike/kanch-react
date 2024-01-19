@@ -1,0 +1,66 @@
+import React from "react";
+
+const FilterItems = () => {
+  return (
+    <div>
+      <div className="filter relative flex gap-5">
+        <p className="">Filter by:</p>
+        <div>
+          <p className="">Availability</p>
+          <div className="hidden absolute top-7 left-24 bg-[#EBD9B4] rounded-lg border border-solid-white shadow-xl p-6">
+            <div className="text-black flex justify-between gap-24">
+              <p>0 Selected</p>
+              <button>Reset</button>
+            </div>
+            <div className="bg-gray-700 h-0.5 rounded-lg mt-3"></div>
+            <div className="flex flex-col pt-3 gap-2">
+              <label htmlFor="instock">
+                <input type="checkbox" id="instock" />
+                In Stock
+              </label>
+              <label htmlFor="outofstock">
+                <input type="checkbox" id="outofstock" />
+                Out Of Stock
+              </label>
+            </div>
+          </div>
+        </div>
+        <div className="">
+          <p className="">Price</p>
+          <div className="hidden absolute top-7 left-26 bg-[#EBD9B4] rounded-lg border border-solid-white shadow-xl p-6">
+            <div className="flex gap-12">
+              <p>The highest price is $5,300.00</p>
+              <button> Reset</button>
+            </div>
+            <div className="bg-gray-700 h-0.5 rounded-lg mt-3 mb-5"></div>
+            <div className="my-3 flex">
+              $
+              <div className="border border-solid border-gray-300 hover:border-gray-600 rounded-md w-24 mr-10">
+                <input
+                  type="number"
+                  className="bg-transparent w-full"
+                  placeholder=" From"
+                  min={0}
+                  max={5000}
+                />
+              </div>
+              $
+              <div className="border border-solid border-gray-300 hover:border-gray-600 rounded-md w-24">
+                <input
+                  type="number"
+                  className="bg-transparent w-full"
+                  placeholder=" To"
+                  min={0}
+                  max={5000}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="sort"></div>
+    </div>
+  );
+};
+
+export default FilterItems;
