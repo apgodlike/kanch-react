@@ -37,10 +37,15 @@ const Header = () => {
           <Search />
         </div>
       </div>
-      <ul>
+      <ul className="mx-auto flex flex-col items-center gap-2 md:flex-row">
         <li>
           <Link to="/">Home</Link>
+        </li>
+        <li>
           <Link to="/shop">Shop</Link>
+        </li>
+        <li>
+          <Link to="/contactus">Contact Us</Link>
         </li>
       </ul>
       {searchActive && (

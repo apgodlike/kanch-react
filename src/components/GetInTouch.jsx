@@ -1,5 +1,6 @@
 import React from "react";
-import ButtonReachout from "./ButtonReachout";
+import { Link } from "react-router-dom";
+import ButtonMedium from "./ButtonMedium";
 
 const GetInTouch = () => {
   return (
@@ -13,7 +14,9 @@ const GetInTouch = () => {
         next collection will drop, reach out and we will be in touch!
       </p>
       <div className="mt-5">
-        <ButtonReachout />
+        <Link to="/contactus">
+          <ButtonMedium displayText="Reach Out!" />
+        </Link>
       </div>
     </div>
   );
