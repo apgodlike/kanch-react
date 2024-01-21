@@ -1,13 +1,16 @@
 import React from "react";
 import image from "../images/300x400.png";
+import image2 from "../images/1080p.jpg";
 import { useParams } from "react-router-dom";
+import ExpandableImage from "./ExpandableImage";
+import ButtonLarge from "./ButtonLarge";
 
 const ItemPage = () => {
   const { id } = useParams();
   return (
     <div className="flex flex-col md:flex-row md:mx-auto md:justify-center md:gap-5">
       <div className="image mx-auto md:mx-0 m-5">
-        <img src={image} />
+        <ExpandableImage src={image2} alt="Description of the image" />
       </div>
       <div className="item-details m-5 gap-1.5 flex flex-col md:w-96">
         <p className="text-gray-600 text-sm md:text-lg">Collection Name {id}</p>
@@ -29,10 +32,8 @@ const ItemPage = () => {
             +
           </button>
         </div>
-        <div className="max-w-80 md:w-72">
-          <button className="w-full text-gray-800 border border-solid border-[#9DBC98] rounded-md h-12 hover:bg-[#9DBC98] transform hover:scale-105 transition">
-            Buy Now!
-          </button>
+        <div>
+          <ButtonLarge to="/" displayText="Buy Now!" />
         </div>
         <div className="mt-5">
           <p>Description</p>
