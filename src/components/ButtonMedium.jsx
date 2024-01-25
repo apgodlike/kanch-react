@@ -3,7 +3,10 @@ import React from "react";
 const ButtonMedium = (props) => {
   return (
     <div>
-      <button className="border border-solid bg-[#9DBC98] hover:bg-[#9DBC98] px-5 py-1 min-w-24 hover:scale-105 rounded-lg">
+      <button
+        type={props.type}
+        className="border border-solid bg-[#9DBC98] hover:bg-[#9DBC98] px-5 py-1 min-w-24 hover:scale-105 rounded-lg"
+      >
         {props.displayText}
       </button>
     </div>
