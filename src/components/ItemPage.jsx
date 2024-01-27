@@ -4,20 +4,43 @@ import image2 from "../images/1080p.jpg";
 import { useParams } from "react-router-dom";
 import ExpandableImage from "./ExpandableImage";
 import ButtonLarge from "./ButtonLarge";
+import axios from "axios";
 
 const ItemPage = ({ handleCartItems }) => {
   const { id } = useParams();
-  const [itemCount, setItemCount] = useState(1);
   const [invalidCount, setInvalidCount] = useState(false);
+  const [addToCart, setAddToCart] = useState({
+    id: id,
+    count: 1,
+  });
+
+  function handleInputCount(e) {
+    const value = e.target.value;
+    setAddToCart((prevValue) => {
+      return { ...prevValue, count: value };
+    });
+  }
+  useEffect(() => {
+    async function getItemDetails() {
+      const response = await axios.get(`${process.env.BASE_URI}/item/${id}`);
+      const responseBody = response.data;
+      setAddToCart((prevValue) => {
+        return { ...prevValue, count: responseBody.count };
+      });
+    }
+    getItemDetails();
+  }, [id]);
 
   useEffect(() => {
-    if (itemCount <= 0) {
+    if (addToCart.count <= 1) {
       setInvalidCount(true);
-      setItemCount(1);
+      setAddToCart((prevValue) => {
+        return { ...prevValue, count: 1 };
+      });
     } else {
       setInvalidCount(false);
     }
-  }, [itemCount]);
+  }, [addToCart.count]);
 
   return (
     <div className="flex flex-col md:flex-row md:mx-auto md:justify-center md:gap-5">
@@ -40,27 +63,26 @@ const ItemPage = ({ handleCartItems }) => {
               invalidCount && "cursor-not-allowed"
             }`}
             onClick={() => {
-              setItemCount((prevCount) => {
-                return prevCount - 1;
+              setAddToCart((prevValue) => {
+                return { ...prevValue, count: Number(prevValue.count) - 1 };
               });
             }}
           >
             -
           </button>
           <input
-            onChange={(e) => {
-              setItemCount(e.target.value);
-            }}
+            onChange={handleInputCount}
             className="ease-in-out delay-150 focus:scale-110 focus:border focus:border-[#9DBC98] w-12 h-12 leading-tight focus:outline-none focus:shadow-outline appearance-none bg-transparent text-center"
             type="number"
-            value={itemCount}
+            value={addToCart.count}
+            max="5"
           />
           <button
             id="add"
             className="w-12 h-12 hover:bg-[#9DBC98] transform hover:scale-105 transition"
             onClick={() => {
-              setItemCount((prevCount) => {
-                return prevCount + 1;
+              setAddToCart((prevValue) => {
+                return { ...prevValue, count: Number(prevValue.count) + 1 };
               });
             }}
           >

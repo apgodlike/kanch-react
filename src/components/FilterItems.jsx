@@ -1,13 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 
 const FilterItems = () => {
+  const [openAvailabilityFilter, setOpenAvailabilityFilter] = useState(false);
+  const [openPriceFilter, setOpenPriceFilter] = useState(false);
+
+  function toggleAvailability() {
+    setOpenAvailabilityFilter(!openAvailabilityFilter);
+  }
+
+  function togglePriceFilter() {
+    setOpenPriceFilter(!openPriceFilter);
+  }
+
   return (
     <div>
       <div className="filter relative flex gap-5">
         <p className="">Filter by:</p>
         <div>
-          <p className="">Availability</p>
-          <div className="hidden absolute top-7 left-24 bg-[#EBD9B4] rounded-lg border border-solid-white shadow-xl p-6">
+          <button onClick={toggleAvailability} className="">
+            Availability
+          </button>
+          <div
+            className={`${
+              !openAvailabilityFilter && "hidden"
+            } absolute top-7 left-24 bg-[#EBD9B4] rounded-lg border border-solid-white shadow-xl p-6`}
+          >
             <div className="text-black flex justify-between gap-24">
               <p>0 Selected</p>
               <button>Reset</button>
@@ -26,8 +43,14 @@ const FilterItems = () => {
           </div>
         </div>
         <div className="">
-          <p className="">Price</p>
-          <div className="hidden absolute top-7 left-26 bg-[#EBD9B4] rounded-lg border border-solid-white shadow-xl p-6">
+          <button onClick={togglePriceFilter} className="">
+            Price
+          </button>
+          <div
+            className={`${
+              !openPriceFilter && "hidden"
+            } absolute top-7 left-26 bg-[#EBD9B4] rounded-lg border border-solid-white shadow-xl p-6`}
+          >
             <div className="flex gap-12">
               <p>The highest price is $5,300.00</p>
               <button> Reset</button>
