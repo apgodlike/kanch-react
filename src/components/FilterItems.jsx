@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 
-const FilterItems = () => {
+const FilterItems = ({
+  availabilityFilter,
+  handleAvailabilityFilter,
+  handleResetFilter,
+}) => {
   const [openAvailabilityFilter, setOpenAvailabilityFilter] = useState(false);
   const [openPriceFilter, setOpenPriceFilter] = useState(false);
 
@@ -27,16 +31,38 @@ const FilterItems = () => {
           >
             <div className="text-black flex justify-between gap-24">
               <p>0 Selected</p>
-              <button>Reset</button>
+              <button
+                id="reset"
+                onClick={(e) => {
+                  // handleResetFilter();
+                  handleAvailabilityFilter(e);
+                }}
+              >
+                Reset
+              </button>
             </div>
             <div className="bg-gray-700 h-0.5 rounded-lg mt-3"></div>
             <div className="flex flex-col pt-3 gap-2">
-              <label htmlFor="instock">
-                <input type="checkbox" id="instock" />
+              <label htmlFor="inStock">
+                <input
+                  type="checkbox"
+                  id="inStock"
+                  onChange={(e) => {
+                    handleAvailabilityFilter(e);
+                  }}
+                  checked={availabilityFilter.inStock}
+                />
                 In Stock
               </label>
-              <label htmlFor="outofstock">
-                <input type="checkbox" id="outofstock" />
+              <label htmlFor="outOfStock">
+                <input
+                  type="checkbox"
+                  id="outOfStock"
+                  onChange={(e) => {
+                    handleAvailabilityFilter(e);
+                  }}
+                  checked={availabilityFilter.outOfStock}
+                />
                 Out Of Stock
               </label>
             </div>
