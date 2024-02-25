@@ -70,7 +70,15 @@ const ProductsList = ({ items }) => {
               className="cursor-pointer w-full hover:scale-103 m-1 p-2 border border-solid border-white rounded-md hover:rounded-lg hover:shadow-lg transition duration-300 ease-in-out"
             >
               <Link to={`/shop/${item.productId}`}>
-                <img src={p400x600_image} className="w-full" />
+                <img
+                  src={
+                    item.productImage
+                      ? `${process.env.REACT_APP_BASE_URI}${item.productImage}`
+                      : p400x600_image
+                  }
+                  className="w-full"
+                />
+                {/* <img src={p400x600_image} className="w-full" /> */}
                 <div className="relative px-1 pt-2">
                   <p className="text-gray-800 text-xl">{item.productName}</p>
                   <p className="text-gray-700 text-sm">{item.unitPrice}</p>

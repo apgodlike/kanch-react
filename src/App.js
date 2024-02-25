@@ -9,6 +9,8 @@ import ImageSlider from "./components/ImageSlider";
 import Cart from "./components/Cart";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import CustomerDetails from "./components/CustomerDetails";
+import AddProducts from "./components/AddProducts";
 const endpoint = process.env.REACT_APP_BASE_URI;
 
 function App() {
@@ -23,7 +25,8 @@ function App() {
   }, [cartItems]);
 
   return (
-    <div className="App bg-[#EBD9B4]">
+    // <div className="App bg-[#EBD9B4]">
+    <div className="App bg-[#fff6e0]">
       <Header cartItems={cartItems} />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -37,6 +40,8 @@ function App() {
         </Route>
         <Route path="/contactus" element={<ContactUs />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/customerdetails" element={<CustomerDetails />} />
+        <Route path="/addproducts" element={<AddProducts />} />
       </Routes>
       <Footer />
     </div>

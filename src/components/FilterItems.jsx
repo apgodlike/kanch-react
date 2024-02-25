@@ -4,6 +4,8 @@ const FilterItems = ({
   availabilityFilter,
   handleAvailabilityFilter,
   handleResetFilter,
+  handlePriceFilter,
+  priceFilter,
 }) => {
   const [openAvailabilityFilter, setOpenAvailabilityFilter] = useState(false);
   const [openPriceFilter, setOpenPriceFilter] = useState(false);
@@ -31,13 +33,7 @@ const FilterItems = ({
           >
             <div className="text-black flex justify-between gap-24">
               <p>0 Selected</p>
-              <button
-                id="reset"
-                onClick={(e) => {
-                  // handleResetFilter();
-                  handleAvailabilityFilter(e);
-                }}
-              >
+              <button id="reset" onClick={handleResetFilter}>
                 Reset
               </button>
             </div>
@@ -86,21 +82,27 @@ const FilterItems = ({
               $
               <div className="border border-solid border-gray-300 hover:border-gray-600 rounded-md w-24 mr-10">
                 <input
+                  id="minPrice"
                   type="number"
                   className="bg-transparent w-full"
                   placeholder=" From"
                   min={0}
                   max={5000}
+                  onChange={handlePriceFilter}
+                  value={priceFilter.minPrice}
                 />
               </div>
               $
               <div className="border border-solid border-gray-300 hover:border-gray-600 rounded-md w-24">
                 <input
+                  id="maxPrice"
                   type="number"
                   className="bg-transparent w-full"
                   placeholder=" To"
                   min={0}
                   max={5000}
+                  onChange={handlePriceFilter}
+                  value={priceFilter.maxPrice}
                 />
               </div>
             </div>

@@ -74,7 +74,7 @@ const ContactUs = () => {
             <span
               className={`absolute left-2 ${
                 contactForm.comment == ""
-                  ? "peer-focus:border peer-focus:border-[#9DBC98] peer-focus:bg-[#EBD9B4] peer-focus:border-y-0 peer-focus:border-x-2 transition ease-in-out peer-focus:text-xs peer-focus:translate-x-0 peer-focus:-translate-y-3 peer-focus:px-2"
+                  ? "peer-focus:border peer-focus:border-[#9DBC98] peer-focus:bg-[#fff6e0] peer-focus:border-y-0 peer-focus:border-x-2 transition ease-in-out peer-focus:text-xs peer-focus:translate-x-0 peer-focus:-translate-y-3 peer-focus:px-2"
                   : "border border-[#9DBC98] bg-[#EBD9B4] border-y-0 border-x-2 transition ease-in-out text-xs translate-x-0 -translate-y-3 px-2"
               }`}
             >

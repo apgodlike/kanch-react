@@ -5,11 +5,26 @@ import axios from "axios";
 
 const Shop = () => {
   const [items, setItems] = useState([]);
+  const [productList, setProductList] = useState([]);
 
   const [availabilityFilter, setAvailabilityFilter] = useState({
     inStock: false,
     outOfStock: false,
   });
+
+  const [priceFilter, setPriceFilter] = useState({
+    minPrice: 0,
+    maxPrice: 0,
+  });
+
+  function handlePriceFilter(e) {
+    const id = e.target.id;
+    const value = e.target.value;
+
+    setPriceFilter((prevValue) => {
+      return { ...prevValue, [id]: value };
+    });
+  }
 
   function handleAvailabilityFilter(e) {
     const id = e.target.id;
@@ -32,9 +47,41 @@ const Shop = () => {
       );
       console.log(res.data);
       setItems(res.data);
+      setProductList(res.data);
     }
     fetchProductList();
   }, []);
+
+  useEffect(() => {
+    let filteredValue = productList.filter((item) => {
+      if (availabilityFilter.inStock === availabilityFilter.outOfStock) {
+        return true;
+      }
+
+      if (item.isAvailable && availabilityFilter.inStock) {
+        return true;
+      }
+      if (!item.isAvailable && availabilityFilter.outOfStock) {
+        return true;
+      }
+      return false;
+    });
+
+    filteredValue = filteredValue.filter((item) => {
+      if (priceFilter.minPrice === 0 && priceFilter.maxPrice === 0) {
+        return true;
+      }
+      if (
+        item.unitPrice >= priceFilter.minPrice &&
+        item.unitPrice <= priceFilter.maxPrice
+      ) {
+        return true;
+      }
+      return false;
+    });
+    setItems(filteredValue);
+  }, [productList, availabilityFilter, priceFilter]);
+
   return (
     <div className="">
       <div className="flex flex-col mx-auto md:w-10/12 lg:w-8/12 xl:w-7/12">
@@ -44,6 +91,8 @@ const Shop = () => {
             availabilityFilter={availabilityFilter}
             handleAvailabilityFilter={handleAvailabilityFilter}
             handleResetFilter={handleResetFilter}
+            handlePriceFilter={handlePriceFilter}
+            priceFilter={priceFilter}
           />
         </div>
         <div>

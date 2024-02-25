@@ -24,21 +24,21 @@ const Header = () => {
       name: "Shop",
       path: "/shop",
     },
-    {
-      id: 3,
-      name: "Catagery",
-      path: "/",
-    },
-    {
-      id: 4,
-      name: "Products",
-      path: "/",
-    },
-    {
-      id: 5,
-      name: "About",
-      path: "/",
-    },
+    // {
+    //   id: 3,
+    //   name: "Catagery",
+    //   path: "/",
+    // },
+    // {
+    //   id: 4,
+    //   name: "Products",
+    //   path: "/",
+    // },
+    // {
+    //   id: 5,
+    //   name: "About",
+    //   path: "/",
+    // },
     {
       id: 6,
       name: "Contact Us",
@@ -85,7 +85,7 @@ const Header = () => {
       <ul
         className={` mx-auto ${
           menuToggle ? "flex absolute" : "hidden"
-        } md:flex transition-all z-20 ease-in-out duration-1000 delay-500 flex-col gap-2 md:flex-row bg-[#F9EFDB] pt-5 p-2 w-10/12 sm:w-8/12 md:w-full h-screen md:h-auto md:justify-center mb-2`}
+        } md:flex transition-all z-20 ease-in-out duration-1000 delay-500 flex-col gap-2 md:flex-row bg-[#F9EFDB] pt-5 p-2 w-10/12 sm:w-8/12 md:w-full h-screen md:h-auto md:justify-center`}
       >
         {menuList.map((item) => {
           return (

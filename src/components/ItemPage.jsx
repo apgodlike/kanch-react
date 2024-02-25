@@ -9,9 +9,8 @@ import Quantity from "./Quantity";
 
 const ItemPage = ({ handleCartItems }) => {
   const userId = localStorage.getItem("userId");
-
   const { id } = useParams();
-  const [invalidQuantity, setInvalidQuantity] = useState(false);
+
   const [itemsFromBackend, setItemsFromBackend] = useState({
     _id: "",
     productName: "",
@@ -19,8 +18,10 @@ const ItemPage = ({ handleCartItems }) => {
     availableQuantity: 0,
     isAvailable: false,
     productId: "",
+    productImage: "",
     __v: 0,
   });
+
   const [addToCart, setAddToCart] = useState({
     _id: userId,
     products: [],
@@ -48,13 +49,6 @@ const ItemPage = ({ handleCartItems }) => {
     }
   }
 
-  function handleInputCount(e) {
-    const value = e.target.value;
-    setAddToCart((prevValue) => {
-      return { ...prevValue, quantity: value };
-    });
-  }
-
   useEffect(() => {
     async function getItemDetails() {
       const response = await axios.get(
@@ -70,24 +64,44 @@ const ItemPage = ({ handleCartItems }) => {
         };
       });
     }
+
     getItemDetails();
   }, [id]);
 
   useEffect(() => {
-    if (addToCart.addedQuantity <= 1) {
-      setInvalidQuantity(true);
-      setAddToCart((prevValue) => {
-        return { ...prevValue, addedQuantity: 1 };
-      });
-    } else {
-      setInvalidQuantity(false);
+    async function fetchProductQuantity() {
+      if (itemsFromBackend.productId) {
+        const response = await axios.get(
+          `${process.env.REACT_APP_BASE_URI}/api/cart/getQuantity`,
+          { params: { id: userId, productId: itemsFromBackend.productId } }
+        );
+        const responseBody = response.data;
+        if (response.status != 200) {
+          return;
+        }
+        setAddToCart((prevValue) => {
+          return {
+            ...prevValue,
+            addedQuantity: [responseBody.quantity],
+          };
+        });
+      }
     }
-  }, [addToCart.addedQuantity]);
+
+    fetchProductQuantity();
+  }, [itemsFromBackend]);
 
   return (
     <div className="flex flex-col md:flex-row md:mx-auto md:justify-center md:gap-5">
       <div className="image mx-auto md:mx-0 m-5">
-        <ExpandableImage src={image2} alt="Description of the image" />
+        <ExpandableImage
+          src={
+            itemsFromBackend.productImage
+              ? `${process.env.REACT_APP_BASE_URI}${itemsFromBackend.productImage}`
+              : image2
+          }
+          alt="Description of the image"
+        />
       </div>
       <div className="item-details m-5 gap-1.5 flex flex-col md:w-96">
         <p className="text-gray-600 text-sm md:text-lg">
@@ -102,23 +116,9 @@ const ItemPage = ({ handleCartItems }) => {
         </p>
         <p className="text-gray-600 md:text-md">Quantity</p>
 
-        <Quantity
-          invalidQuantity={invalidQuantity}
-          setAddToCart={setAddToCart}
-          handleAddToCartSave={handleAddToCartSave}
-          handleInputCount={handleInputCount}
-          addToCart={addToCart}
-        />
+        <Quantity setAddToCart={setAddToCart} addToCart={addToCart} />
 
-        <div
-        // onClick={() => {
-        //   handleCartItems({
-        //     id: 6,
-        //     name: "test1",
-        //     quantity: 6,
-        //   });
-        // }}
-        >
+        <div className="max-w-80 md:w-72">
           <ButtonLarge
             to="/"
             displayText="Add to Cart"
