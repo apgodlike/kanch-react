@@ -4,9 +4,12 @@ import axios from "axios";
 import CartItem from "./CartItem";
 import image2 from "../images/1080p.jpg";
 import { Link, redirect } from "react-router-dom";
+import { useCart } from "../context/useCart";
 
 const Cart = () => {
   const userId = localStorage.getItem("userId");
+
+  const { addToCart, handleDeleteProduct } = useCart();
 
   const [productList, setProductList] = useState([
     {
@@ -49,6 +52,7 @@ const Cart = () => {
       return product.productId != productId;
     });
     setProductList(actualProductList);
+    handleDeleteProduct(productId);
   }
 
   useEffect(() => {
@@ -110,6 +114,7 @@ const Cart = () => {
         fetchProductDetails(product.productId);
         fetchedProductsRef.current.push(product.productId);
       }
+      addToCart(product.productId);
     });
   }, [productList]);
 
@@ -118,7 +123,9 @@ const Cart = () => {
       <div className="bg-[#fff6e0] pt-10 text-gray-700 w-full md:mx-auto md:w-10/12 lg:w-8/12">
         <div className="flex justify-between px-10 text-lg pb-10">
           <p>Your cart</p>
-          <Link to="/shop">Continue Shopping</Link>
+          <Link className="underline" to="/shop">
+            Continue Shopping
+          </Link>
         </div>
         {productList.length == 0 && (
           <div className="flex justify-center align-middle py-24">
@@ -164,7 +171,7 @@ const Cart = () => {
           <p className="col-start-3 md:col-start-4 flex justify-center">
             {`$${totalPrice}`}
           </p>
-          <div className="col-start-3 md:col-start-4 flex justify-center py-5 w-48">
+          <div className="col-start-2 col-span-2 md:col-start-4 md:pl-0 flex justify-center py-5">
             <Link to="/customerdetails">
               <ButtonLarge displayText="Check Out!" />
             </Link>

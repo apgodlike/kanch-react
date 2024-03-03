@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
 import image from "../images/300x400.png";
 import image2 from "../images/1080p.jpg";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import ExpandableImage from "./ExpandableImage";
 import ButtonLarge from "./ButtonLarge";
 import axios from "axios";
 import Quantity from "./Quantity";
+import { useCart } from "../context/useCart";
+import CloseIcon from "@mui/icons-material/Close";
 
 const ItemPage = ({ handleCartItems }) => {
   const userId = localStorage.getItem("userId");
+  const [cartPopup, setCartPopup] = useState(false);
   const { id } = useParams();
+  const useCartHook = useCart();
 
   const [itemsFromBackend, setItemsFromBackend] = useState({
     _id: "",
@@ -44,6 +48,11 @@ const ItemPage = ({ handleCartItems }) => {
       });
 
       !userId && localStorage.setItem("userId", responseBody._id);
+      useCartHook.addToCart(id);
+      setCartPopup(true);
+      setTimeout(() => {
+        setCartPopup(false);
+      }, 5000);
     } catch (err) {
       console.error(err);
     }
@@ -92,7 +101,27 @@ const ItemPage = ({ handleCartItems }) => {
   }, [itemsFromBackend]);
 
   return (
-    <div className="flex flex-col md:flex-row md:mx-auto md:justify-center md:gap-5">
+    <div className="relative flex flex-col md:flex-row md:mx-auto md:justify-center md:gap-5">
+      <section
+        className={
+          cartPopup
+            ? "absolute z-10 cart-popup flex justify-center items-center w-full flex-col bg-[#fff6e0] gap-5 h-32"
+            : "hidden"
+        }
+      >
+        <div
+          onClick={() => {
+            setCartPopup(false);
+          }}
+          className="absolute top-0 right-0 m-2 cursor-pointer"
+        >
+          <CloseIcon />
+        </div>
+        <p className="text-lg">Item Added to the Cart!</p>
+        <Link to="/cart">
+          <p className="underline">View Cart</p>
+        </Link>
+      </section>
       <div className="image mx-auto md:mx-0 m-5">
         <ExpandableImage
           src={

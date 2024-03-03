@@ -52,7 +52,9 @@ const CartItem = (props) => {
         <tr className="grid grid-cols-3 md:grid-cols-4 gap-4 my-10">
           <td className="m-auto row-span-3 flex justify-center">
             <div className="" style={{ width: "100px" }}>
-              <img className="" src={props.src} alt="" />
+              <Link to={`/shop/${props.productId}`}>
+                <img className="" src={props.src} alt="" />
+              </Link>
             </div>
           </td>
           <td className="flex m-auto justify-center gap-3 md:row-span-3">

@@ -4,10 +4,12 @@ import { Link, useLocation } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import LocalMallIcon from "@mui/icons-material/LocalMall";
+import { useCart } from "../context/useCart";
 
 const Header = () => {
   const [searchActive, setSearchActive] = useState(false);
   const [menuToggle, setMenuToggle] = useState(false);
+  const { cartCount } = useCart();
   const location = useLocation();
 
   function toggleOffMenuBar() {
@@ -71,9 +73,16 @@ const Header = () => {
           >
             <Search />
           </div>
-          <Link className="" to="/cart" onClick={toggleOffMenuBar}>
-            <LocalMallIcon />
-          </Link>
+          <div className="relative">
+            <Link className="" to="/cart" onClick={toggleOffMenuBar}>
+              <LocalMallIcon />
+            </Link>
+            {cartCount ? (
+              <p className="absolute bottom-0 right-0 text-xs transform translate-x-1/2 translate-y-1/2 bg-white text-black w-4 h-4 rounded-full flex items-center justify-center">
+                {cartCount}
+              </p>
+            ) : null}
+          </div>
         </div>
       </div>
       <div

@@ -39,6 +39,12 @@ const Shop = () => {
       outOfStock: false,
     });
   }
+  function handlePriceResetFilter() {
+    setPriceFilter({
+      minPrice: 0,
+      maxPrice: 0,
+    });
+  }
 
   useEffect(() => {
     async function fetchProductList() {
@@ -68,7 +74,7 @@ const Shop = () => {
     });
 
     filteredValue = filteredValue.filter((item) => {
-      if (priceFilter.minPrice === 0 && priceFilter.maxPrice === 0) {
+      if (!priceFilter.minPrice && !priceFilter.maxPrice) {
         return true;
       }
       if (
@@ -91,6 +97,7 @@ const Shop = () => {
             availabilityFilter={availabilityFilter}
             handleAvailabilityFilter={handleAvailabilityFilter}
             handleResetFilter={handleResetFilter}
+            handlePriceResetFilter={handlePriceResetFilter}
             handlePriceFilter={handlePriceFilter}
             priceFilter={priceFilter}
           />

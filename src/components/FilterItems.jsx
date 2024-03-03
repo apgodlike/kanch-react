@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const FilterItems = ({
   availabilityFilter,
   handleAvailabilityFilter,
   handleResetFilter,
+  handlePriceResetFilter,
   handlePriceFilter,
   priceFilter,
 }) => {
   const [openAvailabilityFilter, setOpenAvailabilityFilter] = useState(false);
   const [openPriceFilter, setOpenPriceFilter] = useState(false);
+  const availabilityRef = useRef(null);
+  const priceRef = useRef(null);
 
   function toggleAvailability() {
     setOpenAvailabilityFilter(!openAvailabilityFilter);
@@ -18,18 +21,38 @@ const FilterItems = ({
     setOpenPriceFilter(!openPriceFilter);
   }
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        availabilityRef.current &&
+        !availabilityRef.current.contains(event.target)
+      ) {
+        setOpenAvailabilityFilter(false);
+      }
+      if (priceRef.current && !priceRef.current.contains(event.target)) {
+        setOpenPriceFilter(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div>
       <div className="filter relative flex gap-5">
         <p className="">Filter by:</p>
-        <div>
+        <div ref={availabilityRef}>
           <button onClick={toggleAvailability} className="">
             Availability
           </button>
           <div
             className={`${
               !openAvailabilityFilter && "hidden"
-            } absolute top-7 left-24 bg-[#EBD9B4] rounded-lg border border-solid-white shadow-xl p-6`}
+            } absolute top-7 left-24 bg-[#F9EFDB] rounded-lg border border-solid-white shadow-xl p-6`}
           >
             <div className="text-black flex justify-between gap-24">
               <p>0 Selected</p>
@@ -64,18 +87,18 @@ const FilterItems = ({
             </div>
           </div>
         </div>
-        <div className="">
+        <div ref={priceRef} className="">
           <button onClick={togglePriceFilter} className="">
             Price
           </button>
           <div
             className={`${
               !openPriceFilter && "hidden"
-            } absolute top-7 left-26 bg-[#EBD9B4] rounded-lg border border-solid-white shadow-xl p-6`}
+            } absolute top-7 left-26 bg-[#F9EFDB] rounded-lg border border-solid-white shadow-xl p-6`}
           >
             <div className="flex gap-12">
               <p>The highest price is $5,300.00</p>
-              <button> Reset</button>
+              <button onClick={handlePriceResetFilter}> Reset</button>
             </div>
             <div className="bg-gray-700 h-0.5 rounded-lg mt-3 mb-5"></div>
             <div className="my-3 flex">
