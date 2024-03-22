@@ -11,6 +11,7 @@ const Cart = () => {
 
   const { addToCart, handleDeleteProduct } = useCart();
   const [isEmpty, setIsEmpty] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [productList, setProductList] = useState([
     {
@@ -71,6 +72,7 @@ const Cart = () => {
       console.log(response.data);
       setProductList(response.data.products);
       setIsEmpty(false);
+      setIsLoading(false);
     }
     if (userId) {
       getCartItems();
@@ -126,6 +128,10 @@ const Cart = () => {
     });
     productList.length === 0 && setIsEmpty(true);
   }, [productList]);
+
+  if (isLoading) {
+    return <>Loading...</>;
+  }
 
   return (
     <div className="bg-[#fff6e0]">
