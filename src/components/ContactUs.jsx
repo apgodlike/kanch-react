@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ButtonMedium from "./ButtonMedium";
 import InputField from "./InputField";
+import axios from "axios";
 
 const ContactUs = () => {
   const [contactForm, setContactForm] = useState({
@@ -9,6 +10,7 @@ const ContactUs = () => {
     phoneNumber: "",
     comment: "",
   });
+  const [displaySubmittedMessage, setDisplaySubmittedMessage] = useState(false);
 
   function handleChange(e) {
     setContactForm((prevValue) => {
@@ -17,11 +19,31 @@ const ContactUs = () => {
       return { ...prevValue, [id]: value };
     });
   }
-  function handleSubmit() {}
+  async function handleSubmit(e) {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_BASE_URI}/api/contactus`,
+        contactForm,
+        { headers: { "Content-Type": "application/json" } }
+      );
+      const responseBody = response.data;
+      setDisplaySubmittedMessage(true);
+      setTimeout(() => {
+        setDisplaySubmittedMessage(false);
+      }, 5000);
+      setContactForm({
+        name: "",
+        email: "",
+        phoneNumber: "",
+        comment: "",
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
-  useEffect(() => {
-    console.log(contactForm);
-  }, [contactForm]);
+  useEffect(() => {}, [contactForm]);
 
   return (
     <div className="flex flex-col md:mx-auto md:w-10/12 m-10">
@@ -85,6 +107,9 @@ const ContactUs = () => {
         <div className="m-1.5 w-full max-w-md md:max-w-xl">
           <ButtonMedium type="submit" displayText="Send" />
         </div>
+        {displaySubmittedMessage && (
+          <p>Submitted. We will get back to you shortly. Thank you</p>
+        )}
       </form>
     </div>
   );
