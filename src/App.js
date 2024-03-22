@@ -27,7 +27,7 @@ function App() {
 
   return (
     // <div className="App bg-[#EBD9B4]">
-    <div className="App bg-[#fff6e0]">
+    <div className="App bg-[#fff6e0] min-h-screen">
       <CartProvider>
         <Header cartItems={cartItems} />
         <Routes>

@@ -26,24 +26,26 @@ const CartItem = (props) => {
         console.error(err);
       }
     }
-    handleAddToCartSave();
-    props.setProductList((prevValue) => {
-      const index = prevValue.findIndex(
-        (product) => product.productId === props.productId
-      );
+    if (props.productId) {
+      handleAddToCartSave();
+      props.setProductList((prevValue) => {
+        const index = prevValue.findIndex(
+          (product) => product.productId === props.productId
+        );
 
-      if (index !== -1) {
-        const updatedProductList = [...prevValue];
-        updatedProductList[index] = {
-          ...updatedProductList[index],
-          quantity: addToCart.addedQuantity,
-        };
+        if (index !== -1) {
+          const updatedProductList = [...prevValue];
+          updatedProductList[index] = {
+            ...updatedProductList[index],
+            quantity: addToCart.addedQuantity,
+          };
 
-        return updatedProductList;
-      }
+          return updatedProductList;
+        }
 
-      return prevValue;
-    });
+        return prevValue;
+      });
+    }
   }, [addToCart.addedQuantity]);
 
   return (

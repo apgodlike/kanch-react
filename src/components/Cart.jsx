@@ -10,6 +10,7 @@ const Cart = () => {
   const userId = localStorage.getItem("userId");
 
   const { addToCart, handleDeleteProduct } = useCart();
+  const [isEmpty, setIsEmpty] = useState(true);
 
   const [productList, setProductList] = useState([
     {
@@ -49,13 +50,15 @@ const Cart = () => {
     );
 
     const actualProductList = productList.filter((product) => {
-      return product.productId != productId;
+      return product.productId !== productId;
     });
+    console.log(setProductList(actualProductList));
     setProductList(actualProductList);
     handleDeleteProduct(productId);
   }
 
   useEffect(() => {
+    console.log("response.data");
     async function getCartItems() {
       const response = await axios.get(
         `${process.env.REACT_APP_BASE_URI}/api/cart/list`,
@@ -67,8 +70,11 @@ const Cart = () => {
       );
       console.log(response.data);
       setProductList(response.data.products);
+      setIsEmpty(false);
     }
-    getCartItems();
+    if (userId) {
+      getCartItems();
+    }
   }, []);
 
   const fetchedProductsRef = useRef([]);
@@ -111,11 +117,14 @@ const Cart = () => {
 
     productList.forEach((product) => {
       if (!fetchedProductsRef.current.includes(product.productId)) {
-        fetchProductDetails(product.productId);
-        fetchedProductsRef.current.push(product.productId);
+        if (product.productId) {
+          fetchProductDetails(product.productId);
+          fetchedProductsRef.current.push(product.productId);
+        }
       }
       addToCart(product.productId);
     });
+    productList.length === 0 && setIsEmpty(true);
   }, [productList]);
 
   return (
@@ -127,56 +136,59 @@ const Cart = () => {
             Continue Shopping
           </Link>
         </div>
-        {productList.length == 0 && (
+        {isEmpty ? (
           <div className="flex justify-center align-middle py-24">
             <p className="text-3xl">Your cart is empty</p>
           </div>
+        ) : (
+          <>
+            <table className="w-full">
+              <thead>
+                <tr className="grid grid-cols-3 md:grid-cols-4 gap-4">
+                  <th className="col-start-1">PRODUCT</th>
+                  <th className="col-start-2 col-span-1"></th>
+                  <th className="col-start-3 md:col-start-4">TOTAL</th>
+                </tr>
+              </thead>
+              {productList.map((product) => {
+                return (
+                  <Fragment key={product.productId}>
+                    <CartItem
+                      productList={productList}
+                      setProductList={setProductList}
+                      id={product.productId}
+                      key={product.productId}
+                      productId={product.productId}
+                      addedQuantity={product.quantity}
+                      src={
+                        product.productImage
+                          ? `${process.env.REACT_APP_BASE_URI}${product.productImage}`
+                          : image2
+                      }
+                      productName={product.productName}
+                      unitPrice={product.unitPrice}
+                      totalPrice={product.unitPrice * product.quantity}
+                      handleDelete={handleDelete}
+                    />
+                  </Fragment>
+                );
+              })}
+            </table>
+            <div className="grid grid-cols-3 md:grid-cols-4 gap-4 w-full">
+              <p className="flex justify-center col-start-2 md:col-start-3">
+                Subtotal
+              </p>
+              <p className="col-start-3 md:col-start-4 flex justify-center">
+                {`$${totalPrice}`}
+              </p>
+              <div className="col-start-2 col-span-2 md:col-start-4 md:pl-0 flex justify-center py-5">
+                <Link to="/customerdetails">
+                  <ButtonLarge displayText="Check Out!" />
+                </Link>
+              </div>
+            </div>
+          </>
         )}
-        <table className="w-full">
-          <thead>
-            <tr className="grid grid-cols-3 md:grid-cols-4 gap-4">
-              <th className="col-start-1">PRODUCT</th>
-              <th className="col-start-2 col-span-1"></th>
-              <th className="col-start-3 md:col-start-4">TOTAL</th>
-            </tr>
-          </thead>
-          {productList.map((product) => {
-            return (
-              <Fragment key={product.productId}>
-                <CartItem
-                  productList={productList}
-                  setProductList={setProductList}
-                  id={product.productId}
-                  key={product.productId}
-                  productId={product.productId}
-                  addedQuantity={product.quantity}
-                  src={
-                    product.productImage
-                      ? `${process.env.REACT_APP_BASE_URI}${product.productImage}`
-                      : image2
-                  }
-                  productName={product.productName}
-                  unitPrice={product.unitPrice}
-                  totalPrice={product.unitPrice * product.quantity}
-                  handleDelete={handleDelete}
-                />
-              </Fragment>
-            );
-          })}
-        </table>
-        <div className="grid grid-cols-3 md:grid-cols-4 gap-4 w-full">
-          <p className="flex justify-center col-start-2 md:col-start-3">
-            Subtotal
-          </p>
-          <p className="col-start-3 md:col-start-4 flex justify-center">
-            {`$${totalPrice}`}
-          </p>
-          <div className="col-start-2 col-span-2 md:col-start-4 md:pl-0 flex justify-center py-5">
-            <Link to="/customerdetails">
-              <ButtonLarge displayText="Check Out!" />
-            </Link>
-          </div>
-        </div>
       </div>
     </div>
   );

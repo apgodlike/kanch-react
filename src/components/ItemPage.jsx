@@ -79,7 +79,7 @@ const ItemPage = ({ handleCartItems }) => {
 
   useEffect(() => {
     async function fetchProductQuantity() {
-      if (itemsFromBackend.productId) {
+      if (itemsFromBackend.productId && userId) {
         const response = await axios.get(
           `${process.env.REACT_APP_BASE_URI}/api/cart/getQuantity`,
           { params: { id: userId, productId: itemsFromBackend.productId } }
